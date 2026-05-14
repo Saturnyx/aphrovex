@@ -1,9 +1,10 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")] // hide console window on Windows in release
 
 mod close_dialog;
+mod display;
 mod menubar;
-
 use close_dialog::CloseState;
+use display::DisplayPanel;
 use eframe::egui;
 
 fn main() -> eframe::Result {
@@ -18,15 +19,26 @@ fn main() -> eframe::Result {
         Box::new(|_cc| Ok(Box::<App>::default())),
     )
 }
-
-#[derive(Default)]
 struct App {
     close_dialog: CloseState,
+    display_panel: DisplayPanel,
+    display_open: bool,
+}
+
+impl Default for App {
+    fn default() -> Self {
+        Self {
+            close_dialog: CloseState::default(),
+            display_panel: DisplayPanel::default(),
+            display_open: true,
+        }
+    }
 }
 
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        menubar::menubar(ui);
+        menubar::menubar(ui, &mut self.display_open);
+        self.display_panel.show(ui.ctx(), &mut self.display_open);
         self.close_dialog.update(ui);
     }
 }

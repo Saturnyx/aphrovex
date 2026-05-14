@@ -1,9 +1,15 @@
 [package]
-name = "axolotlyx-gui"
+name = "archi-gui"
 version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+anyhow = "1.0.102"
+bytemuck = "1.25.0"
 eframe = "0.34.2"
 egui = "0.34.2"
+egui-snarl = "0.9.0"
 env_logger = "0.11.10"
+fast_image_resize = "6.0.0"
+iceoryx2 = "0.8.1"
+roboscope-ipc = { version = "0.1.0", path = "../ipc" }
