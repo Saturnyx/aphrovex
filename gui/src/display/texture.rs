@@ -14,11 +14,11 @@ impl DisplayPanel {
         let size = [DISPLAY_WIDTH as usize, DISPLAY_HEIGHT as usize];
         let mut rgba = cast_slice(&frame.buffer).to_vec();
 
-        // The display buffer uses a packed u32 format without meaningful alpha,
-        // which ends up as fully transparent in egui. Force opaque alpha so
-        // the image is visible.
-        for alpha in rgba.iter_mut().skip(3).step_by(4) {
-            *alpha = 0xFF;
+        // The display buffer is packed as BGRx/ARGB in native endianness.
+        // Convert to RGBA and force opaque alpha so egui shows it correctly.
+        for pixel in rgba.chunks_exact_mut(4) {
+            pixel.swap(0, 2); // swap R/B
+            pixel[3] = 0xFF;
         }
 
         let image = ColorImage::from_rgba_unmultiplied(size, &rgba);
