@@ -1,2 +1,13 @@
 [workspace]
-members = ["gui", "ipc"]
+members = ["gui"]
+resolver = "3"
+default-members = ["gui"]
+
+[workspace.package]
+version = "0.1.0"
+authors = ["Harshal <saturnyx@disroot.org>"]
+license = "MIT"
+repository = "https://github.com/saturnyx/archipelago"
+
+[workspace.dependencies]
+roboscope-ipc = { version = "0.1.0", path = "../vex-simulation/ipc" }
