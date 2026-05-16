@@ -1,5 +1,4 @@
 use eframe::egui;
-
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_WIDTH, DisplayInput, DisplayInputKind};
 
 use super::DisplayPanel;
@@ -39,24 +38,14 @@ impl DisplayPanel {
             self.is_mouse_down = false;
             let release_count = self.num_clicks;
             self.mouse_coords = coords;
-            self.send_input(
-                DisplayInputKind::Release,
-                self.num_clicks,
-                release_count,
-                coords,
-            );
+            self.send_input(DisplayInputKind::Release, self.num_clicks, release_count, coords);
         } else if pointer_down && self.is_mouse_down {
             if let Some(pos) = pointer_pos {
                 let coords = self.to_display_coords(pos, display_rect);
                 if coords != self.mouse_coords {
                     self.mouse_coords = coords;
                     let release_count = self.num_clicks.wrapping_sub(1);
-                    self.send_input(
-                        DisplayInputKind::Hold,
-                        self.num_clicks,
-                        release_count,
-                        coords,
-                    );
+                    self.send_input(DisplayInputKind::Hold, self.num_clicks, release_count, coords);
                 }
             }
         }

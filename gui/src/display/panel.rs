@@ -1,5 +1,4 @@
 use eframe::egui;
-
 use egui::{Color32, Pos2};
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_UPDATE_PERIOD, DISPLAY_WIDTH};
 

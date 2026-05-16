@@ -16,26 +16,22 @@ fn main() -> eframe::Result {
         viewport: egui::ViewportBuilder::default().with_maximized(true),
         ..Default::default()
     };
-    eframe::run_native(
-        "Confirm exit",
-        options,
-        Box::new(|_cc| Ok(Box::<App>::default())),
-    )
+    eframe::run_native("Confirm exit", options, Box::new(|_cc| Ok(Box::<App>::default())))
 }
 struct App {
-    pub close_dialog: CloseState,
+    pub close_dialog:  CloseState,
     pub display_panel: DisplayPanel,
-    pub display_open: bool,
-    pub about_panel: AboutState,
+    pub display_open:  bool,
+    pub about_panel:   AboutState,
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
-            close_dialog: CloseState::default(),
+            close_dialog:  CloseState::default(),
             display_panel: DisplayPanel::default(),
-            display_open: true,
-            about_panel: AboutState::default(),
+            display_open:  true,
+            about_panel:   AboutState::default(),
         }
     }
 }

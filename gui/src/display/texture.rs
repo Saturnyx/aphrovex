@@ -1,6 +1,5 @@
 use bytemuck::cast_slice;
 use egui::{ColorImage, TextureOptions};
-
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_WIDTH};
 
 use super::DisplayPanel;

@@ -1,14 +1,14 @@
 use egui::Vec2;
 
 pub struct AboutState {
-    pub open: bool,
+    pub open:         bool,
     pub license_open: bool,
 }
 
 impl Default for AboutState {
     fn default() -> Self {
         Self {
-            open: false,
+            open:         false,
             license_open: false,
         }
     }

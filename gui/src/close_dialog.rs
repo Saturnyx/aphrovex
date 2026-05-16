@@ -3,7 +3,7 @@ use egui::Vec2;
 
 pub struct CloseState {
     show_confirmation_dialog: bool,
-    allowed_to_close: bool,
+    allowed_to_close:         bool,
 }
 
 impl CloseState {
@@ -51,7 +51,7 @@ impl Default for CloseState {
     fn default() -> Self {
         Self {
             show_confirmation_dialog: false,
-            allowed_to_close: false,
+            allowed_to_close:         false,
         }
     }
 }

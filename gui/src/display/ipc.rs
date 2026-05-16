@@ -1,5 +1,4 @@
 use iceoryx2::{node::NodeBuilder, signal_handling_mode::SignalHandlingMode};
-
 use roboscope_ipc::{Config, SimServices};
 
 use super::DisplayPanel;
