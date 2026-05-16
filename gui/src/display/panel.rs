@@ -1,6 +1,6 @@
 use eframe::egui;
 
-use egui::Color32;
+use egui::{Color32, Pos2};
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_UPDATE_PERIOD, DISPLAY_WIDTH};
 
 use super::DisplayPanel;
@@ -19,6 +19,7 @@ impl DisplayPanel {
 
         egui::Window::new("Brain Display")
             .open(open)
+            .default_pos(Pos2::new(10.0, 30.0))
             .resizable(true)
             .collapsible(true)
             .default_size(egui::vec2(

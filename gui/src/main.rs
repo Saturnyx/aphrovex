@@ -23,10 +23,10 @@ fn main() -> eframe::Result {
     )
 }
 struct App {
-    close_dialog: CloseState,
-    display_panel: DisplayPanel,
-    display_open: bool,
-    about_panel: AboutState,
+    pub close_dialog: CloseState,
+    pub display_panel: DisplayPanel,
+    pub display_open: bool,
+    pub about_panel: AboutState,
 }
 
 impl Default for App {
@@ -42,7 +42,7 @@ impl Default for App {
 
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
-        menubar::menubar(ui, &mut self.display_open, &mut self.about_panel);
+        self.menubar(ui);
         self.display_panel.show(ui.ctx(), &mut self.display_open);
         self.close_dialog.update(ui);
         self.about_panel.show(ui.ctx());
