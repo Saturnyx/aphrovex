@@ -6,6 +6,7 @@ default-members = ["gui"]
 [workspace.package]
 version = "0.1.0"
 authors = ["Harshal <saturnyx@disroot.org>"]
+description = "A GUI Client for Roboscope IPC"
 license = "MIT"
 repository = "https://github.com/saturnyx/archipelago"
 

@@ -1,4 +1,5 @@
 use eframe::egui;
+use egui::Vec2;
 
 pub struct CloseState {
     show_confirmation_dialog: bool,
@@ -20,6 +21,7 @@ impl CloseState {
     pub fn show_confirmation_dialog(&mut self, ui: &mut egui::Ui) {
         if self.show_confirmation_dialog {
             egui::Window::new("Do you want to quit?")
+                .anchor(egui::Align2::CENTER_CENTER, Vec2::default())
                 .collapsible(false)
                 .resizable(false)
                 .show(ui.ctx(), |ui| {

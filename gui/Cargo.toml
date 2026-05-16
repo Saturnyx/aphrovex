@@ -2,6 +2,9 @@
 name = "archi-gui"
 version = "0.1.0"
 edition = "2024"
+license.workspace = true
+description.workspace = true
+authors.workspace = true
 
 [dependencies]
 anyhow = "1.0.102"
