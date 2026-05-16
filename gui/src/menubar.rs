@@ -8,7 +8,7 @@ impl App {
             egui::MenuBar::new().ui(ui, |ui| {
                 ui.menu_button("File", |ui| {
                     if ui.button("About").clicked() {
-                        self.about_panel.open = true;
+                        self.about.open = true;
                     }
                     if ui.button("Quit").clicked() {
                         ui.send_viewport_cmd(egui::ViewportCommand::Close);
@@ -16,7 +16,7 @@ impl App {
                 });
 
                 ui.menu_button("Add", |ui| {
-                    ui.checkbox(&mut self.display_open, "Display");
+                    ui.checkbox(&mut self.display.display_open, "Display");
                 });
             });
         });

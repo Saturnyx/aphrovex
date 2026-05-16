@@ -1,11 +1,11 @@
 use egui::Vec2;
 
-pub struct AboutState {
+pub struct AboutWindowState {
     pub open:         bool,
     pub license_open: bool,
 }
 
-impl Default for AboutState {
+impl Default for AboutWindowState {
     fn default() -> Self {
         Self {
             open:         false,
@@ -14,7 +14,7 @@ impl Default for AboutState {
     }
 }
 
-impl AboutState {
+impl AboutWindowState {
     pub fn show(&mut self, ctx: &egui::Context) {
         egui::Window::new("About")
             .open(&mut self.open)

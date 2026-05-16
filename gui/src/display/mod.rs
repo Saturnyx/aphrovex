@@ -11,6 +11,20 @@ use roboscope_ipc::{
     display::{DisplayFrame, DisplayInput},
 };
 
+pub struct DisplayWindowState {
+    pub display_open:  bool,
+    pub display_panel: DisplayPanel,
+}
+
+impl Default for DisplayWindowState {
+    fn default() -> Self {
+        Self {
+            display_open:  true,
+            display_panel: DisplayPanel::default(),
+        }
+    }
+}
+
 pub struct DisplayPanel {
     ipc:           Option<SimServices>,
     subscriber:    Option<Subscriber<DisplayFrame>>,

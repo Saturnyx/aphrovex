@@ -1,12 +1,12 @@
 use eframe::egui;
 use egui::Vec2;
 
-pub struct CloseState {
+pub struct CloseWindowState {
     show_confirmation_dialog: bool,
     allowed_to_close:         bool,
 }
 
-impl CloseState {
+impl CloseWindowState {
     pub fn check_close(&mut self, ui: &mut egui::Ui) {
         if ui.input(|i| i.viewport().close_requested()) {
             if self.allowed_to_close {
@@ -47,7 +47,7 @@ impl CloseState {
     }
 }
 
-impl Default for CloseState {
+impl Default for CloseWindowState {
     fn default() -> Self {
         Self {
             show_confirmation_dialog: false,
