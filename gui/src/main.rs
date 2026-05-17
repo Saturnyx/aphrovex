@@ -41,7 +41,7 @@ impl eframe::App for App {
         self.menubar(ui);
         self.display
             .display_panel
-            .show(ui.ctx(), &mut self.display.display_open);
+            .show(ui.ctx(), &mut self.display.open);
         self.close_dialog.update(ui);
         self.about.show(ui.ctx());
         self.prefs.show(ui.ctx());

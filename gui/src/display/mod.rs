@@ -1,7 +1,7 @@
 mod input;
 mod ipc;
-mod panel;
 mod texture;
+mod window;
 
 use egui::TextureHandle;
 use roboscope_ipc::{
@@ -12,14 +12,14 @@ use roboscope_ipc::{
 };
 
 pub struct DisplayWindowState {
-    pub display_open:  bool,
+    pub open:          bool,
     pub display_panel: DisplayPanel,
 }
 
 impl Default for DisplayWindowState {
     fn default() -> Self {
         Self {
-            display_open:  true,
+            open:          true,
             display_panel: DisplayPanel::default(),
         }
     }

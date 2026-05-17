@@ -1,6 +1,6 @@
 pub struct PrefWindow {
-    pub window_open: bool,
-    pub prefs:       Preferences,
+    pub open:  bool,
+    pub prefs: Preferences,
 }
 
 pub struct Preferences {
@@ -37,8 +37,8 @@ pub enum AngleUnits {
 impl Default for PrefWindow {
     fn default() -> Self {
         Self {
-            window_open: false,
-            prefs:       Preferences {
+            open:  false,
+            prefs: Preferences {
                 units: UnitPrefs {
                     length: LengthUnits::Inches,
                     time:   TimeUnits::Seconds,
@@ -52,7 +52,7 @@ impl Default for PrefWindow {
 impl PrefWindow {
     pub fn show(&mut self, ctx: &egui::Context) {
         egui::Window::new("Preferences")
-            .open(&mut self.window_open)
+            .open(&mut self.open)
             .collapsible(true)
             .resizable(true)
             .show(ctx, |ui| {

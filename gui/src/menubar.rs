@@ -11,7 +11,7 @@ impl App {
                         self.about.open = true;
                     }
                     if ui.button("Preferences").clicked() {
-                        self.prefs.window_open = true;
+                        self.prefs.open = true;
                     }
 
                     if ui.button("Quit").clicked() {
@@ -20,7 +20,7 @@ impl App {
                 });
 
                 ui.menu_button("Add", |ui| {
-                    ui.checkbox(&mut self.display.display_open, "Display");
+                    ui.checkbox(&mut self.display.open, "Display");
                 });
             });
         });

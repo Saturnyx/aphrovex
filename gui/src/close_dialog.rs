@@ -2,8 +2,8 @@ use eframe::egui;
 use egui::Vec2;
 
 pub struct CloseWindowState {
-    show_confirmation_dialog: bool,
-    allowed_to_close:         bool,
+    open:             bool,
+    allowed_to_close: bool,
 }
 
 impl CloseWindowState {
@@ -13,13 +13,13 @@ impl CloseWindowState {
                 // do nothing - we will close
             } else {
                 ui.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                self.show_confirmation_dialog = true;
+                self.open = true;
             }
         }
     }
 
     pub fn show_confirmation_dialog(&mut self, ui: &mut egui::Ui) {
-        if self.show_confirmation_dialog {
+        if self.open {
             egui::Window::new("Do you want to quit?")
                 .anchor(egui::Align2::CENTER_CENTER, Vec2::default())
                 .collapsible(false)
@@ -27,12 +27,12 @@ impl CloseWindowState {
                 .show(ui.ctx(), |ui| {
                     ui.horizontal(|ui| {
                         if ui.button("No").clicked() {
-                            self.show_confirmation_dialog = false;
+                            self.open = false;
                             self.allowed_to_close = false;
                         }
 
                         if ui.button("Yes").clicked() {
-                            self.show_confirmation_dialog = false;
+                            self.open = false;
                             self.allowed_to_close = true;
                             ui.send_viewport_cmd(egui::ViewportCommand::Close);
                         }
@@ -50,8 +50,8 @@ impl CloseWindowState {
 impl Default for CloseWindowState {
     fn default() -> Self {
         Self {
-            show_confirmation_dialog: false,
-            allowed_to_close:         false,
+            open:             false,
+            allowed_to_close: false,
         }
     }
 }
