@@ -10,6 +10,10 @@ impl App {
                     if ui.button("About").clicked() {
                         self.about.open = true;
                     }
+                    if ui.button("Preferences").clicked() {
+                        self.prefs.window_open = true;
+                    }
+
                     if ui.button("Quit").clicked() {
                         ui.send_viewport_cmd(egui::ViewportCommand::Close);
                     }

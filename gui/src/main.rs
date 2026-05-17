@@ -4,10 +4,11 @@ mod about;
 mod close_dialog;
 mod display;
 mod menubar;
+mod prefs;
 use close_dialog::CloseWindowState;
 use eframe::egui;
 
-use crate::{about::AboutWindowState, display::DisplayWindowState};
+use crate::{about::AboutWindowState, display::DisplayWindowState, prefs::PrefWindow};
 
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
@@ -21,6 +22,7 @@ struct App {
     pub close_dialog: CloseWindowState,
     pub display:      DisplayWindowState,
     pub about:        AboutWindowState,
+    pub prefs:        PrefWindow,
 }
 
 impl Default for App {
@@ -29,6 +31,7 @@ impl Default for App {
             close_dialog: CloseWindowState::default(),
             display:      DisplayWindowState::default(),
             about:        AboutWindowState::default(),
+            prefs:        PrefWindow::default(),
         }
     }
 }
@@ -41,5 +44,6 @@ impl eframe::App for App {
             .show(ui.ctx(), &mut self.display.display_open);
         self.close_dialog.update(ui);
         self.about.show(ui.ctx());
+        self.prefs.show(ui.ctx());
     }
 }
