@@ -3,16 +3,17 @@ use egui::{Color32, Pos2};
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_UPDATE_PERIOD, DISPLAY_WIDTH};
 
 use super::DisplayPanel;
+use crate::ipc::AppIpc;
 
 const PANEL_HEIGHT_OFFSET: u32 = 30;
 
 impl DisplayPanel {
-    pub fn show(&mut self, ctx: &egui::Context, open: &mut bool) {
+    pub fn show(&mut self, ctx: &egui::Context, open: &mut bool, ipc: &mut AppIpc) {
         if !*open {
             return;
         }
 
-        self.ensure_ipc();
+        self.ensure_ipc(ipc);
 
         ctx.request_repaint_after(*DISPLAY_UPDATE_PERIOD);
 
@@ -49,6 +50,11 @@ impl DisplayPanel {
                 egui::CentralPanel::default()
                     .frame(egui::Frame::new())
                     .show_inside(ui, |ui| {
+                        if let Some(err) = ipc.init_error() {
+                            ui.label(err);
+                            return;
+                        }
+
                         if let Some(err) = &self.init_error {
                             ui.label(err);
                             return;

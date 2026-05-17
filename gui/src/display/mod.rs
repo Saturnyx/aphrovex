@@ -6,7 +6,6 @@ mod window;
 use egui::TextureHandle;
 use roboscope_ipc::{
     Publisher,
-    SimServices,
     Subscriber,
     display::{DisplayFrame, DisplayInput},
 };
@@ -26,7 +25,6 @@ impl Default for DisplayWindowState {
 }
 
 pub struct DisplayPanel {
-    ipc:           Option<SimServices>,
     subscriber:    Option<Subscriber<DisplayFrame>>,
     publisher:     Option<Publisher<DisplayInput>>,
     last_frame:    Option<Box<DisplayFrame>>,
@@ -40,7 +38,6 @@ pub struct DisplayPanel {
 impl Default for DisplayPanel {
     fn default() -> Self {
         Self {
-            ipc:           None,
             subscriber:    None,
             publisher:     None,
             last_frame:    None,
