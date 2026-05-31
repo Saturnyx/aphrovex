@@ -122,3 +122,37 @@ impl PrefWindow {
             });
     }
 }
+
+impl Preferences {
+    /// degrees -> 360
+    /// radians -> 2*pi
+    pub fn get_rotation_units(&self) -> f32 {
+        match self.units.angle {
+            AngleUnits::Degrees => 360.0,
+            AngleUnits::Radians => 2.0 * std::f32::consts::PI,
+        }
+    }
+
+    pub fn get_rotation_units_as_string(&self) -> String {
+        match self.units.angle {
+            AngleUnits::Degrees => "degrees".to_string(),
+            AngleUnits::Radians => "radians".to_string(),
+        }
+    }
+
+    pub fn get_time_units(&self) -> f32 {
+        match self.units.time {
+            TimeUnits::Milliseconds => 1000.0,
+            TimeUnits::Seconds => 1.0,
+            TimeUnits::Minutes => 1.0 / 60.0,
+        }
+    }
+
+    pub fn get_time_units_as_string(&self) -> String {
+        match self.units.time {
+            TimeUnits::Milliseconds => "ms".to_string(),
+            TimeUnits::Seconds => "sec".to_string(),
+            TimeUnits::Minutes => "min".to_string(),
+        }
+    }
+}

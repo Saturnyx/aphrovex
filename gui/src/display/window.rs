@@ -2,18 +2,26 @@ use eframe::egui;
 use egui::{Color32, Pos2};
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_UPDATE_PERIOD, DISPLAY_WIDTH};
 
-use super::DisplayPanel;
+use super::DisplayWindowState;
 use crate::ipc::AppIpc;
 
 const PANEL_HEIGHT_OFFSET: u32 = 30;
 
-impl DisplayPanel {
-    pub fn show(&mut self, ctx: &egui::Context, open: &mut bool, ipc: &mut AppIpc) {
-        if !*open {
+impl DisplayWindowState {
+    pub fn show(&mut self, ctx: &egui::Context, ipc: &mut AppIpc) {
+        if !self.open {
             return;
         }
 
-        self.ensure_ipc(ipc);
+        // The thread side handles IPC and forwards frames; the panel side
+        // just drains the channel and renders.
+        self.thread.ensure_ipc(ipc);
+        self.thread.poll_and_forward_frame();
+        self.thread.forward_touch();
+
+        let open = &mut self.open;
+        let panel = &mut self.display_panel;
+        let thread = &self.thread;
 
         ctx.request_repaint_after(*DISPLAY_UPDATE_PERIOD);
 
@@ -37,13 +45,14 @@ impl DisplayPanel {
                     .frame(egui::Frame::new())
                     .show_separator_line(false)
                     .show_inside(ui, |ui| {
-                        let mut label = egui::Label::new(format!(
-                            "Coords ({},{})",
-                            self.mouse_coords[0], self.mouse_coords[1]
-                        ));
-                        if !self.is_mouse_down {
-                            label = egui::Label::new("Click to interact");
-                        }
+                        let label = if panel.touch.is_mouse_down {
+                            egui::Label::new(format!(
+                                "Coords ({},{})",
+                                panel.touch.mouse_coords[0], panel.touch.mouse_coords[1],
+                            ))
+                        } else {
+                            egui::Label::new("Click to interact")
+                        };
                         ui.add(label);
                     });
 
@@ -55,14 +64,17 @@ impl DisplayPanel {
                             return;
                         }
 
-                        if let Some(err) = &self.init_error {
-                            ui.label(err);
+                        if let Some(err) = &thread.init_error {
+                            ui.label(err.clone());
                             return;
                         }
 
-                        let updated = self.poll_frame();
-                        if updated || self.texture.is_none() {
-                            self.update_texture(ui.ctx());
+                        // Drain any new frames the background thread sent us.
+                        if let Some(frame) = panel.recv_frame() {
+                            panel.update_texture(ui.ctx(), &frame);
+                        } else if panel.texture.is_none() {
+                            // No frame yet and no cached texture — nothing to
+                            // update, but we'll fall through to the placeholder.
                         }
 
                         let available_rect = ui.available_rect_before_wrap();
@@ -85,7 +97,7 @@ impl DisplayPanel {
                         let painter = ui.painter();
                         painter.rect_filled(available_rect, 0.0, Color32::from_rgb(27, 27, 27));
 
-                        if let Some(texture) = &self.texture {
+                        if let Some(texture) = &panel.texture {
                             let uv = egui::Rect::from_min_max(
                                 egui::pos2(0.0, 0.0),
                                 egui::pos2(1.0, 1.0),
@@ -101,7 +113,7 @@ impl DisplayPanel {
                             );
                         }
 
-                        self.handle_input(ui, display_rect);
+                        panel.handle_input(ui, display_rect);
                     });
             });
     }
