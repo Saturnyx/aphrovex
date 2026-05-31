@@ -8,9 +8,9 @@ pub struct Preferences {
 }
 
 pub struct UnitPrefs {
-    length: LengthUnits,
-    time:   TimeUnits,
-    angle:  AngleUnits,
+    length:      LengthUnits,
+    time:        TimeUnits,
+    angle:       AngleUnits,
 }
 
 #[derive(PartialEq, Debug)]
@@ -40,9 +40,9 @@ impl Default for PrefWindow {
             open:  false,
             prefs: Preferences {
                 units: UnitPrefs {
-                    length: LengthUnits::Inches,
-                    time:   TimeUnits::Seconds,
-                    angle:  AngleUnits::Degrees,
+                    length:      LengthUnits::Inches,
+                    time:        TimeUnits::Seconds,
+                    angle:       AngleUnits::Degrees,
                 },
             },
         }

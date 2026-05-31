@@ -1,6 +1,6 @@
 use rand::Rng;
 use roboscope_ipc::{
-    cmd::{DeviceCommand, MotorCommand},
+    cmd::{DeviceCommand, MotorCommand, MotorGearset},
     snapshot::MotorSnapshot,
 };
 
@@ -42,6 +42,44 @@ impl MotorWindowState {
             .id(egui::Id::new(self.id))
             .show(ctx, |ui| {
                 ui.horizontal(|ui| {
+                    let desired_size = egui::vec2(100.0, 100.0);
+                    let (rect, _response) =
+                        ui.allocate_exact_size(desired_size, egui::Sense::hover());
+                    let painter = ui.painter_at(rect);
+                    let fill_color = match motor_state.gearset {
+                        MotorGearset::Ratio36To1 => egui::Color32::RED,
+                        MotorGearset::Ratio18To1 => egui::Color32::DARK_GREEN,
+                        MotorGearset::Ratio06To1 => egui::Color32::BLUE,
+                    };
+
+                    painter.circle_filled(rect.center(), 40.0, fill_color);
+                    // TODO: Add motor visualization here
+
+                    ui.separator();
+
+                    ui.vertical(|ui| {
+                        ui.label(format!("Motor Control Mode: {:?}", motor_state.mode));
+                        ui.label(format!("Brake Mode: {:?}", motor_state.brake_mode));
+                        ui.label(format!("Current Limit: {:?}", motor_state.current_limit));
+                        ui.label(format!("PWM range: {:?}", motor_state.pwm));
+                        ui.label(format!(
+                            "Target Position: {:?} {}",
+                            motor_state.target_position as f32 * prefs.get_rotation_units() /
+                                ROTATION_TO_TICKS,
+                            prefs.get_rotation_units_as_string()
+                        ));
+                        ui.label(format!(
+                            "Target Velocity: {:?} {}/{}",
+                            motor_state.target_velocity as f32 * prefs.get_rotation_units() /
+                                ROTATION_TO_TICKS /
+                                prefs.get_time_units(),
+                            prefs.get_rotation_units_as_string(),
+                            prefs.get_time_units_as_string()
+                        ));
+                    });
+                });
+                ui.add(egui::Separator::default());
+                ui.horizontal(|ui| {
                     ui.label("Port (1-21)");
                     if ui.add(egui::Slider::new(&mut port_num, 1..=21)).changed() {
                         self.port = (port_num - 1) as usize; // self.port: 0..=20
@@ -82,46 +120,50 @@ impl MotorWindowState {
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Flags");
+                    ui.label("Flags:");
                     ui.label(format!("{:?}", self.snapshot.flags));
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Faults");
+                    ui.label("Faults:");
                     ui.label(format!("{:?}", self.snapshot.faults));
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Temperature (°C)");
-                    ui.add(egui::Slider::new(&mut self.snapshot.temperature, 0..=150));
+                    ui.label("Temperature (in °C)");
+                    ui.add(egui::Slider::new(&mut self.snapshot.temperature, 0..=150))
+                        .on_hover_text("in °C");
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Current (mA)");
-                    ui.add(egui::DragValue::new(&mut self.snapshot.current));
+                    ui.label("Current (in mA)");
+                    ui.add(egui::DragValue::new(&mut self.snapshot.current))
+                        .on_hover_text("in mA");
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Power (W)");
-                    ui.add(egui::DragValue::new(&mut self.snapshot.power).speed(0.1));
+                    ui.label("Power (in W)");
+                    ui.add(egui::DragValue::new(&mut self.snapshot.power).speed(0.1))
+                        .on_hover_text("in W");
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Torque (Nm)");
-                    ui.add(egui::DragValue::new(&mut self.snapshot.torque).speed(0.01));
+                    ui.label("Torque (in Nm)");
+                    ui.add(egui::DragValue::new(&mut self.snapshot.torque).speed(0.01))
+                        .on_hover_text("in Nm");
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Efficiency (%)");
-                    ui.add(egui::Slider::new(&mut self.snapshot.efficiency, 0.0..=100.0));
+                    ui.label("Efficiency (in %)");
+                    ui.add(egui::Slider::new(&mut self.snapshot.efficiency, 0.0..=100.0))
+                        .on_hover_text("in %");
                 });
 
                 ui.horizontal(|ui| {
-                    ui.label("Applied Voltage (mV)");
-                    ui.add(egui::DragValue::new(&mut self.snapshot.applied_voltage));
+                    ui.label("Applied Voltage (in mV)");
+                    ui.add(egui::DragValue::new(&mut self.snapshot.applied_voltage))
+                        .on_hover_text("in mV");
                 });
-
-                ui.add(egui::Label::new(format!("motor: {:?}", motor_state)));
             });
     }
 

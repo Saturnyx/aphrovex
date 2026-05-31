@@ -21,7 +21,9 @@ use crate::{
 fn main() -> eframe::Result {
     env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
     let options = eframe::NativeOptions {
-        viewport: egui::ViewportBuilder::default().with_maximized(true),
+        viewport: egui::ViewportBuilder::default()
+            .with_app_id("gui.archipelago")
+            .with_maximized(true),
         ..Default::default()
     };
     let (app_ipc, mut thread_ipc) = AppIpc::new();
