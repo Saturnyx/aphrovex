@@ -9,20 +9,25 @@ mod prefs;
 
 use close_dialog::CloseWindowState;
 use eframe::egui;
+use egui::Color32;
 
 use crate::{
     about::AboutWindowState,
     display::DisplayWindowState,
     ipc::AppIpc,
     motors::MotorWindowState,
-    prefs::PrefWindow,
+    prefs::{PrefWindow, Preferences},
 };
 
+const APP_NAME: &str = "Archipelago";
+
 fn main() -> eframe::Result {
-    env_logger::init(); // Log to stderr (if you run with `RUST_LOG=debug`).
+    env_logger::init();
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_app_id("gui.archipelago")
+            .with_app_id(APP_NAME)
+            .with_taskbar(true)
+            .with_transparent(true)
             .with_maximized(true),
         ..Default::default()
     };
@@ -33,8 +38,12 @@ fn main() -> eframe::Result {
     eframe::run_native(
         env!("CARGO_BIN_NAME"),
         options,
-        Box::new(|_cc| {
-            let app = App::from_ipc(app_ipc);
+        Box::new(|cc| {
+            let prefs = cc
+                .storage
+                .and_then(|storage| eframe::get_value(storage, eframe::APP_KEY))
+                .unwrap_or_default();
+            let app = App::from_ipc(app_ipc, prefs);
             Ok(Box::new(app))
         }),
     )
@@ -50,13 +59,13 @@ struct App {
 }
 
 impl App {
-    fn from_ipc(ipc: AppIpc) -> Self {
+    fn from_ipc(ipc: AppIpc, prefs: Preferences) -> Self {
         Self {
             close_dialog: CloseWindowState::default(),
             display: DisplayWindowState::default(),
             about: AboutWindowState::default(),
             motors: Vec::new(),
-            prefs: PrefWindow::default(),
+            prefs: PrefWindow::from_prefs(prefs),
             ipc,
         }
     }
@@ -65,14 +74,26 @@ impl App {
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
         self.menubar(ui);
-        self.display.show(ui.ctx(), &mut self.ipc);
-        self.close_dialog.update(ui);
-        self.about.show(ui.ctx());
         self.prefs.show(ui.ctx());
+        self.display.show(ui.ctx(), &mut self.ipc);
+        self.close_dialog.update(ui, &self.prefs.prefs);
+        self.about.show(ui.ctx());
         for motor in &mut self.motors {
             motor.show(ui.ctx(), &mut self.ipc, &self.prefs.prefs);
         }
         self.ipc.sync();
         self.motors.retain(|m| m.open);
+        let frame = egui::Frame::default().fill(Color32::from_black_alpha(
+            (self.prefs.prefs.transparent_window * 255.0) as u8,
+        ));
+
+        egui::CentralPanel::default()
+            .frame(frame)
+            .show_inside(ui, |_| {});
+    }
+
+    fn save(&mut self, storage: &mut dyn eframe::Storage) {
+        // Direct eframe to serialize your preferences struct using the same APP_KEY
+        eframe::set_value(storage, eframe::APP_KEY, &self.prefs.prefs);
     }
 }

@@ -3,17 +3,21 @@ pub struct PrefWindow {
     pub prefs: Preferences,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Preferences {
-    units: UnitPrefs,
+    pub units:              UnitPrefs,
+    pub close_dialog:       bool, // whether close dialog is active
+    pub transparent_window: f32,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct UnitPrefs {
-    length:      LengthUnits,
-    time:        TimeUnits,
-    angle:       AngleUnits,
+    length: LengthUnits,
+    time:   TimeUnits,
+    angle:  AngleUnits,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, PartialEq, Debug)]
 pub enum LengthUnits {
     Meters,
     Inches,
@@ -21,41 +25,56 @@ pub enum LengthUnits {
     Centimeters,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, PartialEq, Debug)]
 pub enum TimeUnits {
     Milliseconds,
     Seconds,
     Minutes,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(serde::Serialize, serde::Deserialize, PartialEq, Debug)]
 pub enum AngleUnits {
     Radians,
     Degrees,
+}
+
+impl Default for Preferences {
+    fn default() -> Self {
+        Self {
+            units:              UnitPrefs {
+                length: LengthUnits::Inches,
+                time:   TimeUnits::Seconds,
+                angle:  AngleUnits::Degrees,
+            },
+            close_dialog:       true,
+            transparent_window: 0.2,
+        }
+    }
 }
 
 impl Default for PrefWindow {
     fn default() -> Self {
         Self {
             open:  false,
-            prefs: Preferences {
-                units: UnitPrefs {
-                    length:      LengthUnits::Inches,
-                    time:        TimeUnits::Seconds,
-                    angle:       AngleUnits::Degrees,
-                },
-            },
+            prefs: Preferences::default(),
         }
     }
 }
 
 impl PrefWindow {
+    pub fn from_prefs(prefs: Preferences) -> Self { Self { open: false, prefs } }
+
     pub fn show(&mut self, ctx: &egui::Context) {
         egui::Window::new("Preferences")
             .open(&mut self.open)
             .collapsible(true)
             .resizable(true)
             .show(ctx, |ui| {
+                ui.heading("GUI");
+                ui.checkbox(&mut self.prefs.close_dialog, "Enable close dialog");
+                ui.add(egui::Slider::new(&mut self.prefs.transparent_window, 0.05..=1.0));
+                ui.separator();
+                ui.heading("Units");
                 let length_label = egui::Label::new("Length Units:");
                 let time_label = egui::Label::new("Time Units:");
                 let angle_label = egui::Label::new("Angle Units:");
