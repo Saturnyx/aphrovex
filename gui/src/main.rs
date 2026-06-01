@@ -73,6 +73,7 @@ impl App {
 
 impl eframe::App for App {
     fn ui(&mut self, ui: &mut egui::Ui, _frame: &mut eframe::Frame) {
+        ui.ctx().set_visuals(self.prefs.prefs.theme.to_visuals());
         self.menubar(ui);
         self.prefs.show(ui.ctx());
         self.display.show(ui.ctx(), &mut self.ipc);

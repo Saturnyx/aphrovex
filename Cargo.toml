@@ -11,4 +11,5 @@ license = "MIT"
 repository = "https://github.com/saturnyx/archipelago"
 
 [workspace.dependencies]
-roboscope-ipc = { version = "0.1.0", path = "../vex-simulation/ipc" }
+roboscope-ipc = { git = "https://github.com/lewisfm/vex-simulation" }
+egui-thematic = { git = "https://github.com/Saturnyx/egui-thematic" } # Custom version

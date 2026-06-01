@@ -18,3 +18,4 @@ iceoryx2 = "0.8.1"
 rand = "0.10.1"
 roboscope-ipc = { workspace = true }
 serde = { version = "1.0.228", features = ["derive"] }
+egui-thematic = { workspace = true }

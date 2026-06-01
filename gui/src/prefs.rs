@@ -1,3 +1,5 @@
+use egui_thematic::ThemeConfig;
+
 pub struct PrefWindow {
     pub open:  bool,
     pub prefs: Preferences,
@@ -8,6 +10,7 @@ pub struct Preferences {
     pub units:              UnitPrefs,
     pub close_dialog:       bool, // whether close dialog is active
     pub transparent_window: f32,
+    pub theme:              ThemeConfig,
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -48,6 +51,7 @@ impl Default for Preferences {
             },
             close_dialog:       true,
             transparent_window: 0.2,
+            theme:              ThemeConfig::dark_preset(),
         }
     }
 }
@@ -73,6 +77,67 @@ impl PrefWindow {
                 ui.heading("GUI");
                 ui.checkbox(&mut self.prefs.close_dialog, "Enable close dialog");
                 ui.add(egui::Slider::new(&mut self.prefs.transparent_window, 0.05..=1.0));
+                egui::ComboBox::from_id_salt("theme")
+                    .selected_text("Theme")
+                    .show_ui(ui, |ui| {
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::dark_preset(),
+                            "Dark",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::light_preset(),
+                            "Light",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::dracula_preset(),
+                            "Dracula",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::gruvbox_dark_preset(),
+                            "Gruvbox",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::monokai_preset(),
+                            "Monokai",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::nord_preset(),
+                            "Nord",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::one_dark_preset(),
+                            "One Dark",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::solarized_dark_preset(),
+                            "Solarized Dark",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::solarized_light_preset(),
+                            "Solarized Light",
+                        );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::tokyo_night_preset(),
+                            "Tokyo Night",
+                        );
+
+                        ui.selectable_value(
+                            // TODO: Implement `PartialEq` for `ThemeConfig`
+                            &mut self.prefs.theme,
+                            ThemeConfig::catppuccin_mocha_preset(),
+                            "Catppuccin Mocha",
+                        );
+                    });
                 ui.separator();
                 ui.heading("Units");
                 let length_label = egui::Label::new("Length Units:");
