@@ -1,5 +1,9 @@
+//! Close Dialog
+
 use eframe::egui;
 use egui::Vec2;
+
+use crate::prefs::Preferences;
 
 pub struct CloseWindowState {
     open:             bool,
@@ -7,13 +11,15 @@ pub struct CloseWindowState {
 }
 
 impl CloseWindowState {
-    pub fn check_close(&mut self, ui: &mut egui::Ui) {
-        if ui.input(|i| i.viewport().close_requested()) {
-            if self.allowed_to_close {
-                // do nothing - we will close
-            } else {
-                ui.send_viewport_cmd(egui::ViewportCommand::CancelClose);
-                self.open = true;
+    pub fn check_close(&mut self, ui: &mut egui::Ui, prefs: &Preferences) {
+        if prefs.close_dialog {
+            if ui.input(|i| i.viewport().close_requested()) {
+                if self.allowed_to_close {
+                    // do nothing - we will close
+                } else {
+                    ui.send_viewport_cmd(egui::ViewportCommand::CancelClose);
+                    self.open = true;
+                }
             }
         }
     }
@@ -41,8 +47,8 @@ impl CloseWindowState {
         }
     }
 
-    pub fn update(&mut self, ui: &mut egui::Ui) {
-        self.check_close(ui);
+    pub fn update(&mut self, ui: &mut egui::Ui, prefs: &Preferences) {
+        self.check_close(ui, prefs);
         self.show_confirmation_dialog(ui);
     }
 }

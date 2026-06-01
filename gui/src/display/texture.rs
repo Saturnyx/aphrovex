@@ -1,15 +1,13 @@
 use bytemuck::cast_slice;
 use egui::{ColorImage, TextureOptions};
-use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_WIDTH};
+use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_WIDTH, DisplayFrame};
 
 use super::DisplayPanel;
 
 impl DisplayPanel {
-    pub fn update_texture(&mut self, ctx: &egui::Context) {
-        let Some(frame) = &self.last_frame else {
-            return;
-        };
-
+    /// Convert `frame` to an egui texture and cache it.  Call this whenever
+    /// `recv_frame()` returns `Some(…)`.
+    pub fn update_texture(&mut self, ctx: &egui::Context, frame: &DisplayFrame) {
         let size = [DISPLAY_WIDTH as usize, DISPLAY_HEIGHT as usize];
         let mut rgba = cast_slice(&frame.buffer).to_vec();
 

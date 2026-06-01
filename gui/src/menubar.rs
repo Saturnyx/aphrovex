@@ -21,6 +21,9 @@ impl App {
 
                 ui.menu_button("Add", |ui| {
                     ui.checkbox(&mut self.display.open, "Display");
+                    if ui.button("Motor").clicked() {
+                        self.motors.push(Default::default());
+                    }
                 });
             });
         });

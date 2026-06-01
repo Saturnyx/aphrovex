@@ -1,4 +1,8 @@
+//! This is everything about, well, the "About" window.
+
 use egui::Vec2;
+
+use crate::APP_NAME;
 
 pub struct AboutWindowState {
     pub open:         bool,
@@ -23,7 +27,7 @@ impl AboutWindowState {
             .resizable(false)
             .collapsible(false)
             .show(ctx, |ui| {
-                let title = egui::Label::new(egui::RichText::new("Archipelago").size(18.0))
+                let title = egui::Label::new(egui::RichText::new(APP_NAME).size(18.0))
                     .halign(egui::Align::Center);
                 let subtitle = egui::Label::new(env!("CARGO_PKG_DESCRIPTION"));
                 let author = egui::Label::new(format!("By {}", env!("CARGO_PKG_AUTHORS")));
