@@ -27,7 +27,7 @@ const APP_NAME: &str = "Archipelago";
 
 fn main() -> eframe::Result {
     env_logger::init();
-    let icon_bytes = include_bytes!("../../assets/img/export/starfish_32.png");
+    let icon_bytes = include_bytes!("../assets/img/export/starfish_32.png");
     let icon = image::load_from_memory(icon_bytes).expect("Whoops, couldn't find icon");
     let icon_data = egui::IconData {
         rgba:   icon

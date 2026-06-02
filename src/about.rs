@@ -28,10 +28,9 @@ impl AboutWindowState {
             .collapsible(false)
             .show(ctx, |ui| {
                 ui.vertical_centered(|ui| {
-                    let icon = egui::Image::new(include_image!(
-                        "../../assets/img/export/starfish_128.png"
-                    ))
-                    .max_width(50.0);
+                    let icon =
+                        egui::Image::new(include_image!("../assets/img/export/starfish_128.png"))
+                            .max_width(50.0);
                     ui.add(icon);
                     let title = egui::Label::new(egui::RichText::new(APP_NAME).size(18.0))
                         .halign(egui::Align::Center);
@@ -62,7 +61,7 @@ impl AboutWindowState {
                 .collapsible(false)
                 .show(ctx, |ui| {
                     egui::ScrollArea::vertical().show(ui, |ui| {
-                        let license = egui::Label::new(include_str!("../../LICENSE"));
+                        let license = egui::Label::new(include_str!("../LICENSE"));
                         ui.add(license);
                     })
                 });

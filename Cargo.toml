@@ -1,15 +1,24 @@
-[workspace]
-members = ["gui"]
-resolver = "3"
-default-members = ["gui"]
-
-[workspace.package]
+[package]
+name = "archipelago"
 version = "0.1.0"
+edition = "2024"
 authors = ["Harshal <saturnyx@disroot.org>"]
 description = "A GUI Client for Roboscope IPC"
 license = "MIT"
 repository = "https://github.com/saturnyx/archipelago"
 
-[workspace.dependencies]
+[dependencies]
+egui-snarl = "0.9.0"
+bytemuck = "1.25.0"
+eframe = { version = "0.34.2", features = ["persistence"] }
+anyhow = "1.0.102"
+egui = { version = "0.34.2", features = ["persistence"] }
+env_logger = "0.11.10"
+fast_image_resize = "6.0.0"
+iceoryx2 = "0.8.1"
+rand = "0.10.1"
 roboscope-ipc = { git = "https://github.com/lewisfm/vex-simulation" }
+serde = { version = "1.0.228", features = ["derive"] }
 egui-thematic = { git = "https://github.com/Saturnyx/egui-thematic" } # Custom version
+image = "0.25.10"
+egui_extras = { version = "0.34.3", features = ["image"] }

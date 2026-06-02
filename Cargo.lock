@@ -293,7 +293,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "archi-gui"
+name = "archipelago"
 version = "0.1.0"
 dependencies = [
  "anyhow",
