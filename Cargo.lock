@@ -267,6 +267,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f202df86484c868dbad7eaa557ef785d5c66295e41b460ef922eca0723b842c"
 
 [[package]]
+name = "aphrovex"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "bytemuck",
+ "eframe",
+ "egui 0.34.3",
+ "egui-snarl",
+ "egui-thematic",
+ "egui_extras",
+ "env_logger",
+ "fast_image_resize",
+ "iceoryx2",
+ "image",
+ "rand 0.10.1",
+ "roboscope-ipc",
+ "serde",
+]
+
+[[package]]
 name = "arbitrary"
 version = "1.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -290,26 +310,6 @@ dependencies = [
  "percent-encoding",
  "windows-sys 0.60.2",
  "x11rb",
-]
-
-[[package]]
-name = "archipelago"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "bytemuck",
- "eframe",
- "egui 0.34.3",
- "egui-snarl",
- "egui-thematic",
- "egui_extras",
- "env_logger",
- "fast_image_resize",
- "iceoryx2",
- "image",
- "rand 0.10.1",
- "roboscope-ipc",
- "serde",
 ]
 
 [[package]]

@@ -1,11 +1,11 @@
 [package]
-name = "archipelago"
+name = "aphrovex"
 version = "0.1.0"
 edition = "2024"
 authors = ["Harshal <saturnyx@disroot.org>"]
 description = "A GUI Client for Roboscope IPC"
 license = "MIT"
-repository = "https://github.com/saturnyx/archipelago"
+repository = "https://github.com/saturnyx/aphrovex"
 
 [dependencies]
 egui-snarl = "0.9.0"

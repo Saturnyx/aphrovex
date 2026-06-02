@@ -23,7 +23,7 @@ use crate::{
     prefs::{PrefWindow, Preferences},
 };
 
-const APP_NAME: &str = "Archipelago";
+const APP_NAME: &str = "Aphrovex";
 
 fn main() -> eframe::Result {
     env_logger::init();
