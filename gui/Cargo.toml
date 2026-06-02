@@ -19,3 +19,5 @@ rand = "0.10.1"
 roboscope-ipc = { workspace = true }
 serde = { version = "1.0.228", features = ["derive"] }
 egui-thematic = { workspace = true }
+image = "0.25.10"
+egui_extras = { version = "0.34.3", features = ["image"] }

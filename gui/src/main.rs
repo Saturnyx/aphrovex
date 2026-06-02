@@ -7,6 +7,8 @@ mod menubar;
 mod motors;
 mod prefs;
 
+use std::sync::Arc;
+
 use close_dialog::CloseWindowState;
 use eframe::egui;
 use egui::Color32;
@@ -23,11 +25,23 @@ const APP_NAME: &str = "Archipelago";
 
 fn main() -> eframe::Result {
     env_logger::init();
+    let icon_bytes = include_bytes!("../../assets/img/export/starfish_32.png");
+    let icon = image::load_from_memory(icon_bytes).expect("Whoops, couldn't find icon");
+    let icon_data = egui::IconData {
+        rgba:   icon
+            .as_rgba8()
+            .expect("Unable to load icon")
+            .as_raw()
+            .clone(),
+        width:  icon.width(),
+        height: icon.height(),
+    };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
             .with_app_id(APP_NAME)
             .with_taskbar(true)
             .with_transparent(true)
+            .with_icon(Arc::new(icon_data))
             .with_maximized(true),
         ..Default::default()
     };
@@ -43,6 +57,7 @@ fn main() -> eframe::Result {
                 .storage
                 .and_then(|storage| eframe::get_value(storage, eframe::APP_KEY))
                 .unwrap_or_default();
+            egui_extras::install_image_loaders(&cc.egui_ctx);
             let app = App::from_ipc(app_ipc, prefs);
             Ok(Box::new(app))
         }),
