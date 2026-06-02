@@ -31,11 +31,13 @@ impl MotorWindowState {
     pub fn show(&mut self, ctx: &egui::Context, ipc: &mut AppIpc, prefs: &Preferences) {
         let motor_state = self.state(ipc, self.snapshot);
         let mut port_num: i32 = self.port as i32 + 1; // slider_value: 1..=21
-        let mut position =
-            (self.snapshot.raw_position as f32) * prefs.get_rotation_units() / ROTATION_TO_TICKS; // convert back to degrees for display
-        let mut veloc = (self.snapshot.raw_velocity as f32) * prefs.get_rotation_units() /
+        let mut position = (self.snapshot.raw_position as f32) *
+            prefs.get_rotation_units_in_rotations() /
+            ROTATION_TO_TICKS; // convert back to degrees for display
+        let mut veloc = (self.snapshot.raw_velocity as f32) *
+            prefs.get_rotation_units_in_rotations() /
             ROTATION_TO_TICKS /
-            prefs.get_time_units(); // convert back to user units per user time
+            prefs.get_time_units_in_secs(); // convert back to user units per user time
         egui::Window::new("Motor")
             .collapsible(true)
             .open(&mut self.open)
@@ -64,15 +66,17 @@ impl MotorWindowState {
                         ui.label(format!("PWM range: {:?}", motor_state.pwm));
                         ui.label(format!(
                             "Target Position: {:?} {}",
-                            motor_state.target_position as f32 * prefs.get_rotation_units() /
+                            motor_state.target_position as f32 *
+                                prefs.get_rotation_units_in_rotations() /
                                 ROTATION_TO_TICKS,
                             prefs.get_rotation_units_as_string()
                         ));
                         ui.label(format!(
                             "Target Velocity: {:?} {}/{}",
-                            motor_state.target_velocity as f32 * prefs.get_rotation_units() /
+                            motor_state.target_velocity as f32 *
+                                prefs.get_rotation_units_in_rotations() /
                                 ROTATION_TO_TICKS /
-                                prefs.get_time_units(),
+                                prefs.get_time_units_in_secs(),
                             prefs.get_rotation_units_as_string(),
                             prefs.get_time_units_as_string()
                         ));
@@ -93,8 +97,9 @@ impl MotorWindowState {
                         .on_hover_text(format!("in {}", prefs.get_rotation_units_as_string()))
                         .changed()
                     {
-                        self.snapshot.raw_position =
-                            (position * ROTATION_TO_TICKS / prefs.get_rotation_units()) as i32;
+                        self.snapshot.raw_position = (position * ROTATION_TO_TICKS /
+                            prefs.get_rotation_units_in_rotations())
+                            as i32;
                     }
                 });
 
@@ -114,8 +119,8 @@ impl MotorWindowState {
                         .changed()
                     {
                         self.snapshot.raw_velocity =
-                            (veloc * ROTATION_TO_TICKS / prefs.get_rotation_units() *
-                                prefs.get_time_units()) as i32;
+                            (veloc * ROTATION_TO_TICKS / prefs.get_rotation_units_in_rotations() *
+                                prefs.get_time_units_in_secs()) as i32;
                     }
                 });
 

@@ -2,6 +2,7 @@
 mod about;
 mod close_dialog;
 mod display;
+mod distance;
 mod ipc;
 mod menubar;
 mod motors;
@@ -16,6 +17,7 @@ use egui::Color32;
 use crate::{
     about::AboutWindowState,
     display::DisplayWindowState,
+    distance::DistanceWindowState,
     ipc::AppIpc,
     motors::MotorWindowState,
     prefs::{PrefWindow, Preferences},
@@ -69,6 +71,7 @@ struct App {
     pub display:      DisplayWindowState,
     pub about:        AboutWindowState,
     pub motors:       Vec<MotorWindowState>,
+    pub distance:     Vec<DistanceWindowState>,
     pub prefs:        PrefWindow,
     pub ipc:          AppIpc,
 }
@@ -80,6 +83,7 @@ impl App {
             display: DisplayWindowState::default(),
             about: AboutWindowState::default(),
             motors: Vec::new(),
+            distance: Vec::new(),
             prefs: PrefWindow::from_prefs(prefs),
             ipc,
         }
@@ -97,8 +101,12 @@ impl eframe::App for App {
         for motor in &mut self.motors {
             motor.show(ui.ctx(), &mut self.ipc, &self.prefs.prefs);
         }
+        for distance in &mut self.distance {
+            distance.show(ui.ctx(), &mut self.ipc, &self.prefs.prefs);
+        }
         self.ipc.sync();
         self.motors.retain(|m| m.open);
+        self.distance.retain(|m| m.open);
         let frame = egui::Frame::default().fill(Color32::from_black_alpha(
             (self.prefs.prefs.transparent_window * 255.0) as u8,
         ));

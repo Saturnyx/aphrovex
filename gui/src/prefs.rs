@@ -39,6 +39,7 @@ pub enum TimeUnits {
 pub enum AngleUnits {
     Radians,
     Degrees,
+    Rotations,
 }
 
 impl Default for Preferences {
@@ -76,7 +77,7 @@ impl PrefWindow {
             .show(ctx, |ui| {
                 ui.heading("GUI");
                 ui.checkbox(&mut self.prefs.close_dialog, "Enable close dialog");
-                ui.add(egui::Slider::new(&mut self.prefs.transparent_window, 0.05..=1.0));
+                ui.add(egui::Slider::new(&mut self.prefs.transparent_window, 0.0..=1.0));
                 egui::ComboBox::from_id_salt("theme")
                     .selected_text("Theme")
                     .show_ui(ui, |ui| {
@@ -132,7 +133,6 @@ impl PrefWindow {
                         );
 
                         ui.selectable_value(
-                            // TODO: Implement `PartialEq` for `ThemeConfig`
                             &mut self.prefs.theme,
                             ThemeConfig::catppuccin_mocha_preset(),
                             "Catppuccin Mocha",
@@ -202,6 +202,11 @@ impl PrefWindow {
                             AngleUnits::Degrees,
                             "Degrees",
                         );
+                        ui.selectable_value(
+                            &mut self.prefs.units.angle,
+                            AngleUnits::Rotations,
+                            "Rotations",
+                        );
                     });
             });
     }
@@ -210,10 +215,11 @@ impl PrefWindow {
 impl Preferences {
     /// degrees -> 360
     /// radians -> 2*pi
-    pub fn get_rotation_units(&self) -> f32 {
+    pub fn get_rotation_units_in_rotations(&self) -> f32 {
         match self.units.angle {
             AngleUnits::Degrees => 360.0,
             AngleUnits::Radians => 2.0 * std::f32::consts::PI,
+            AngleUnits::Rotations => 1.0,
         }
     }
 
@@ -221,10 +227,11 @@ impl Preferences {
         match self.units.angle {
             AngleUnits::Degrees => "degrees".to_string(),
             AngleUnits::Radians => "radians".to_string(),
+            AngleUnits::Rotations => "rotations".to_string(),
         }
     }
 
-    pub fn get_time_units(&self) -> f32 {
+    pub fn get_time_units_in_secs(&self) -> f32 {
         match self.units.time {
             TimeUnits::Milliseconds => 1000.0,
             TimeUnits::Seconds => 1.0,
@@ -235,8 +242,26 @@ impl Preferences {
     pub fn get_time_units_as_string(&self) -> String {
         match self.units.time {
             TimeUnits::Milliseconds => "ms".to_string(),
-            TimeUnits::Seconds => "sec".to_string(),
+            TimeUnits::Seconds => "s".to_string(),
             TimeUnits::Minutes => "min".to_string(),
+        }
+    }
+
+    pub fn get_length_units_in_meters(&self) -> f32 {
+        match self.units.length {
+            LengthUnits::Centimeters => 100.0,
+            LengthUnits::Feet => 3.28084,
+            LengthUnits::Inches => 39.3701,
+            LengthUnits::Meters => 1.0,
+        }
+    }
+
+    pub fn get_length_units_as_string(&self) -> String {
+        match self.units.length {
+            LengthUnits::Centimeters => "cm".to_string(),
+            LengthUnits::Feet => "'".to_string(),
+            LengthUnits::Inches => '"'.to_string(),
+            LengthUnits::Meters => "m".to_string(),
         }
     }
 }

@@ -26,6 +26,9 @@ impl App {
                     if ui.button("Motor").clicked() {
                         self.motors.push(Default::default());
                     }
+                    if ui.button("Distance Sensor").clicked() {
+                        self.distance.push(Default::default());
+                    }
                 });
             });
         });
