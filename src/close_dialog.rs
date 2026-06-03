@@ -1,7 +1,6 @@
 //! Close Dialog
 
 use eframe::egui;
-use egui::Vec2;
 
 use crate::prefs::Preferences;
 
@@ -26,24 +25,22 @@ impl CloseWindowState {
 
     pub fn show_confirmation_dialog(&mut self, ui: &mut egui::Ui) {
         if self.open {
-            egui::Window::new("Do you want to quit?")
-                .anchor(egui::Align2::CENTER_CENTER, Vec2::default())
-                .collapsible(false)
-                .resizable(false)
-                .show(ui.ctx(), |ui| {
-                    ui.horizontal(|ui| {
-                        if ui.button("No").clicked() {
-                            self.open = false;
-                            self.allowed_to_close = false;
-                        }
+            egui::Modal::new(egui::Id::new("Dialog")).show(ui.ctx(), |ui| {
+                ui.heading("Confirm Exit?");
+                ui.separator();
+                ui.horizontal(|ui| {
+                    if ui.button("No").clicked() {
+                        self.open = false;
+                        self.allowed_to_close = false;
+                    }
 
-                        if ui.button("Yes").clicked() {
-                            self.open = false;
-                            self.allowed_to_close = true;
-                            ui.send_viewport_cmd(egui::ViewportCommand::Close);
-                        }
-                    });
+                    if ui.button("Yes").clicked() {
+                        self.open = false;
+                        self.allowed_to_close = true;
+                        ui.send_viewport_cmd(egui::ViewportCommand::Close);
+                    }
                 });
+            });
         }
     }
 

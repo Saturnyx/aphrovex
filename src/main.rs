@@ -12,7 +12,6 @@ use std::sync::Arc;
 
 use close_dialog::CloseWindowState;
 use eframe::egui;
-use egui::Color32;
 
 use crate::{
     about::AboutWindowState,
@@ -107,8 +106,12 @@ impl eframe::App for App {
         self.ipc.sync();
         self.motors.retain(|m| m.open);
         self.distance.retain(|m| m.open);
-        let frame = egui::Frame::default().fill(Color32::from_black_alpha(
-            (self.prefs.prefs.transparent_window * 255.0) as u8,
+        let bg = ui.visuals().extreme_bg_color;
+        let frame = egui::Frame::default().fill(egui::Color32::from_rgba_unmultiplied(
+            bg.r(),
+            bg.g(),
+            bg.b(),
+            (self.prefs.prefs.transparent_window * 258.0) as u8,
         ));
 
         egui::CentralPanel::default()
@@ -120,4 +123,6 @@ impl eframe::App for App {
         // Direct eframe to serialize your preferences struct using the same APP_KEY
         eframe::set_value(storage, eframe::APP_KEY, &self.prefs.prefs);
     }
+
+    fn clear_color(&self, _visuals: &egui::Visuals) -> [f32; 4] { [0.0, 0.0, 0.0, 0.0] }
 }
