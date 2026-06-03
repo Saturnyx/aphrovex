@@ -11,7 +11,11 @@ A Simulator Frontend for [Vexide](https://vexide.dev) programs based on
 Aphrovex provides a GUI and physics simulator(not yet) which can be hooked up with
 [Roboscope](https://github.com/vexide/roboscope). Here's how things work:
 
-![](assets/readme/flowchart.png)
+![]()
+
+<div align="center">
+    <img src="assets/readme/flowchart.png" alt="flowchart" width="50%" style="margin-bottom: -50px;">
+</div>
 
 # Features
 Aphrovex currently implements the following features:
