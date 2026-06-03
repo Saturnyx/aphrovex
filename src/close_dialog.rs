@@ -26,7 +26,8 @@ impl CloseWindowState {
     pub fn show_confirmation_dialog(&mut self, ui: &mut egui::Ui) {
         if self.open {
             egui::Modal::new(egui::Id::new("Dialog")).show(ui.ctx(), |ui| {
-                ui.heading("Confirm Exit?");
+                ui.heading("Confirm Exit?")
+                    .on_hover_text("Your preferences are auto-saved");
                 ui.separator();
                 ui.horizontal(|ui| {
                     if ui.button("No").clicked() {

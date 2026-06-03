@@ -34,25 +34,33 @@ impl AboutWindowState {
                         egui::Label::new(egui::RichText::new(env!("CARGO_BIN_NAME")).size(18.0))
                             .halign(egui::Align::Center);
                     ui.add(title);
+
+                    let subtitle =
+                        egui::Label::new(egui::RichText::new(env!("CARGO_PKG_DESCRIPTION")));
+                    let author = egui::Label::new(egui::RichText::new(format!(
+                        "By {}",
+                        env!("CARGO_PKG_AUTHORS")
+                    )));
+                    let version = egui::Label::new(egui::RichText::new(format!(
+                        "Version {}",
+                        env!("CARGO_PKG_VERSION")
+                    )));
                     egui::warn_if_debug_build(ui);
+
+                    let spacer = egui::Separator::default();
+
+                    ui.add(version);
+                    ui.add(subtitle);
+                    ui.add(author);
+                    ui.add(spacer);
+
+                    if ui
+                        .button(format!("License ({})", env!("CARGO_PKG_LICENSE")))
+                        .clicked()
+                    {
+                        self.license_open = !self.license_open;
+                    }
                 });
-
-                let subtitle = egui::Label::new(env!("CARGO_PKG_DESCRIPTION"));
-                let author = egui::Label::new(format!("By {}", env!("CARGO_PKG_AUTHORS")));
-                let version = egui::Label::new(format!("Version {}", env!("CARGO_PKG_VERSION")));
-                let spacer = egui::Separator::default();
-
-                ui.add(subtitle);
-                ui.add(version);
-                ui.add(author);
-                ui.add(spacer);
-
-                if ui
-                    .button(format!("License ({})", env!("CARGO_PKG_LICENSE")))
-                    .clicked()
-                {
-                    self.license_open = !self.license_open;
-                }
             });
         if self.license_open {
             egui::Window::new(env!("CARGO_PKG_LICENSE"))
