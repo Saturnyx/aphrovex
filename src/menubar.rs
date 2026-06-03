@@ -1,12 +1,12 @@
 use eframe::egui;
 
-use crate::{APP_NAME, App};
+use crate::App;
 
 impl App {
     pub fn menubar(&mut self, ui: &mut egui::Ui) {
         egui::Panel::top("menu_bar").show_inside(ui, |ui| {
             egui::MenuBar::new().ui(ui, |ui| {
-                ui.label(APP_NAME);
+                ui.label(env!("CARGO_BIN_NAME"));
                 ui.separator();
                 ui.menu_button("File", |ui| {
                     if ui.button("About").clicked() {

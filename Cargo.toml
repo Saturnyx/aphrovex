@@ -1,9 +1,10 @@
+cargo-features = ["profile-rustflags"]
 [package]
-name = "aphrovex"
+name = "Aphrovex"
 version = "0.1.0"
 edition = "2024"
 authors = ["Harshal <saturnyx@disroot.org>"]
-description = "A GUI Client for Roboscope IPC"
+description = "A Simulator Frontend for Roboscope IPC"
 license = "MIT"
 repository = "https://github.com/saturnyx/aphrovex"
 
@@ -17,8 +18,28 @@ env_logger = "0.11.10"
 fast_image_resize = "6.0.0"
 iceoryx2 = "0.8.1"
 rand = "0.10.1"
-roboscope-ipc = { git = "https://github.com/lewisfm/vex-simulation" }
+roboscope-ipc = { git = "https://github.com/lewisfm/vex-simulation" } # Roboscope
 serde = { version = "1.0.228", features = ["derive"] }
 egui-thematic = { git = "https://github.com/Saturnyx/egui-thematic" } # Custom version
 image = "0.25.10"
 egui_extras = { version = "0.34.3", features = ["image"] }
+
+[profile.dev]
+opt-level = 0       # Do absolutely no code optimization
+debug = 0           # Completely remove all debug symbols (huge speedup)
+rpath = false       # Disable runtime library paths
+lto = false         # Disable Link-Time Optimization
+incremental = true  # Ensure incremental compilation is turned on
+codegen-units = 256 # Split code into maximum chunks for parallel compiling
+panic = "abort"     # Remove stack unwinding code (saves compilation time)
+
+# IMPORTANT
+# You need to have Mold installed on linux for this to work. You can install
+# Mold at https://github.com/rui314/mold. If you are not on linux, or wish to
+# not use mold, you can just comment out the below line.
+rustflags = ["-C", "link-arg=-fuse-ld=mold"]
+
+# Apply the same zero-optimization rules to your dependencies
+[profile.dev.package."*"]
+opt-level = 0
+debug = 0

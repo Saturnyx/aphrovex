@@ -137,6 +137,11 @@ impl PrefWindow {
                             ThemeConfig::catppuccin_mocha_preset(),
                             "Catppuccin Mocha",
                         );
+                        ui.selectable_value(
+                            &mut self.prefs.theme,
+                            ThemeConfig::rose_pine_preset(),
+                            "Rose Pine",
+                        );
                     });
                 ui.separator();
                 ui.heading("Units");

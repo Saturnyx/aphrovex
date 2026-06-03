@@ -22,12 +22,10 @@ use crate::{
     prefs::{PrefWindow, Preferences},
 };
 
-const APP_NAME: &str = "Aphrovex";
-
 fn main() -> eframe::Result {
     env_logger::init();
-    let icon_bytes = include_bytes!("../assets/img/export/starfish_32.png");
-    let icon = image::load_from_memory(icon_bytes).expect("Whoops, couldn't find icon");
+    let icon_bytes = include_bytes!("../assets/img/export/starfish_32.png"); // Include icon image
+    let icon = image::load_from_memory(icon_bytes).expect("Whoops, couldn't load icon");
     let icon_data = egui::IconData {
         rgba:   icon
             .as_rgba8()
@@ -39,7 +37,7 @@ fn main() -> eframe::Result {
     };
     let options = eframe::NativeOptions {
         viewport: egui::ViewportBuilder::default()
-            .with_app_id(APP_NAME)
+            .with_app_id(env!("CARGO_BIN_NAME"))
             .with_taskbar(true)
             .with_transparent(true)
             .with_icon(Arc::new(icon_data))
@@ -120,7 +118,6 @@ impl eframe::App for App {
     }
 
     fn save(&mut self, storage: &mut dyn eframe::Storage) {
-        // Direct eframe to serialize your preferences struct using the same APP_KEY
         eframe::set_value(storage, eframe::APP_KEY, &self.prefs.prefs);
     }
 

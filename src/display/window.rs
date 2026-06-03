@@ -1,5 +1,5 @@
 use eframe::egui;
-use egui::{Color32, Pos2};
+use egui::Pos2;
 use roboscope_ipc::display::{DISPLAY_HEIGHT, DISPLAY_UPDATE_PERIOD, DISPLAY_WIDTH};
 
 use super::DisplayWindowState;
@@ -95,7 +95,7 @@ impl DisplayWindowState {
                             ui.allocate_rect(available_rect, egui::Sense::click_and_drag());
 
                         let painter = ui.painter();
-                        painter.rect_filled(available_rect, 0.0, Color32::from_rgb(27, 27, 27));
+                        painter.rect_filled(available_rect, 0.0, ui.visuals().window_fill);
 
                         if let Some(texture) = &panel.texture {
                             let uv = egui::Rect::from_min_max(

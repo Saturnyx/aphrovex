@@ -2,8 +2,6 @@
 
 use egui::{Vec2, include_image};
 
-use crate::APP_NAME;
-
 pub struct AboutWindowState {
     pub open:         bool,
     pub license_open: bool,
@@ -32,9 +30,11 @@ impl AboutWindowState {
                         egui::Image::new(include_image!("../assets/img/export/starfish_128.png"))
                             .max_width(50.0);
                     ui.add(icon);
-                    let title = egui::Label::new(egui::RichText::new(APP_NAME).size(18.0))
-                        .halign(egui::Align::Center);
+                    let title =
+                        egui::Label::new(egui::RichText::new(env!("CARGO_BIN_NAME")).size(18.0))
+                            .halign(egui::Align::Center);
                     ui.add(title);
+                    egui::warn_if_debug_build(ui);
                 });
 
                 let subtitle = egui::Label::new(env!("CARGO_PKG_DESCRIPTION"));
