@@ -37,3 +37,8 @@ and ideas that have yet to come. Some of which include:
 Note: The following feature(s) will not be implemented:
 
  - Serial Device Connection (completely separate system)
+
+# Use of AI
+Ai has been strictly used only for the explanation of code to
+developers, rather than writing code itself. More than 80% of 
+code is human written.
